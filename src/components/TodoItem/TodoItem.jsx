@@ -52,18 +52,21 @@ export const TodoItem = ({ items, editTitle, changeStatus, removeItem }) => {
               />
             </div>
           )}
-          <input
-            type="text"
-            className="edit"
-            value={editedTitle}
-            onChange={({ target }) => setEditedTitle(target.value.trimLeft())}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === 'Escape') {
-                handleClick(event);
+          {item.id === editId && (
+            <input
+              type="text"
+              className="edit"
+              autoFocus
+              value={editedTitle}
+              onChange={({ target }) => setEditedTitle(target.value.trimLeft())}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === 'Escape') {
+                  handleClick(event);
+                }
               }
-            }
-            }
-          />
+              }
+            />
+          )}
         </li>
       ))}
     </>

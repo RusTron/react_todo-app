@@ -2,9 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TodoItem } from '../TodoItem';
 
-export const TodoList = ({ items, setTodos, setActiveCount, activeCount }) => {
+export const TodoList = ({
+  items,
+  setTodos,
+  todos,
+  setActiveCount,
+  activeCount,
+}) => {
   const changeStatus = (id) => {
-    setTodos([...items].map((item) => {
+    setTodos(todos.map((item) => {
       if (item.id === id) {
         return {
           ...item,
@@ -21,13 +27,18 @@ export const TodoList = ({ items, setTodos, setActiveCount, activeCount }) => {
   };
 
   const changeAll = (value, todoItems) => {
-    if (value) {
-      setTodos(todoItems.map(item => ({ ...item, completed: true })));
-      setActiveCount(0);
-    } else {
-      setTodos(todoItems.map(item => ({ ...item, completed: false })));
-      setActiveCount(items.length);
-    }
+    setTodos(todos.map((item) => {
+      if (todoItems.includes(item)) {
+        return {
+          ...item,
+          completed: value,
+        };
+      }
+
+      return item;
+    }));
+
+    setActiveCount(value ? 0 : todos.length);
   };
 
   const removeItem = (id) => {
@@ -49,15 +60,19 @@ export const TodoList = ({ items, setTodos, setActiveCount, activeCount }) => {
 
   return (
     <section className="main">
-      <input
-        type="checkbox"
-        id="toggle-all"
-        className="toggle-all"
-        readOnly
-        checked={activeCount === 0 && items.length}
-        onChange={({ target }) => changeAll(target.checked, items)}
-      />
-      <label htmlFor="toggle-all">Mark all as complete</label>
+      {items.length !== 0 && (
+        <>
+          <input
+            type="checkbox"
+            id="toggle-all"
+            className="toggle-all"
+            readOnly
+            checked={activeCount === 0 && items.length}
+            onChange={({ target }) => changeAll(target.checked, items)}
+          />
+          <label htmlFor="toggle-all">Mark all as complete</label>
+        </>
+      )}
 
       <ul className="todo-list">
         {items.map(item => (
@@ -82,6 +97,13 @@ export const TodoList = ({ items, setTodos, setActiveCount, activeCount }) => {
 
 TodoList.propTypes = {
   items: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      title: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+    }).isRequired,
+  ).isRequired,
+  todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,

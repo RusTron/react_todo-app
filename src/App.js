@@ -28,7 +28,7 @@ function App() {
     localStorage.setItem('count', JSON.stringify(activeCount));
   }, [todos, activeCount]);
 
-  const filteredTodos = (selected) => {
+  const filteredTodos = (selected = isSelected) => {
     if (selected === active) {
       return todos.filter(todo => !todo.completed);
     }
@@ -46,6 +46,10 @@ function App() {
       id: +new Date(),
       completed: false,
     };
+
+    if (!todo.title) {
+      return;
+    }
 
     setTodos([...todos, todo]);
     setTitle('');
@@ -80,9 +84,9 @@ function App() {
       <TodoList
         items={filteredTodos(isSelected)}
         setTodos={setTodos}
+        todos={todos}
         setActiveCount={setActiveCount}
         activeCount={activeCount}
-        filteredTodos={filteredTodos()}
       />
       {todos.length !== 0 && (
         <footer className="footer">
