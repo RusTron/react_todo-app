@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 
@@ -28,17 +28,17 @@ function App() {
     localStorage.setItem('count', JSON.stringify(activeCount));
   }, [todos, activeCount]);
 
-  const filteredTodos = (selected = isSelected) => {
+  const filteredTodos = useCallback((selected = isSelected) => {
     if (selected === active) {
-      return todos.filter(todo => !todo.completed);
+      return todos.filter(todo => !todo.completed && todo.title);
     }
 
     if (selected === completed) {
-      return todos.filter(todo => todo.completed);
+      return todos.filter(todo => todo.completed && todo.title);
     }
 
-    return todos;
-  };
+    return todos.filter(todo => todo.title);
+  }, [todos, isSelected]);
 
   const addTodo = () => {
     const todo = {

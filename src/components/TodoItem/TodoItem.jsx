@@ -8,15 +8,17 @@ export const TodoItem = ({ items, editTitle, changeStatus, removeItem }) => {
 
   const handleClick = (event) => {
     event.preventDefault();
-
-    if (event.key === 'Enter') {
-      editTitle(editedTitle, editId);
-      setEditId(0);
-
-      return;
+    if (!event.target.value) {
+      return removeItem(editId);
     }
 
-    setEditId(0);
+    if (event.key === 'Enter' || event.type === 'blur') {
+      editTitle(editedTitle, editId);
+
+      return setEditId(0);
+    }
+
+    return setEditId(0);
   };
 
   return (
@@ -65,6 +67,7 @@ export const TodoItem = ({ items, editTitle, changeStatus, removeItem }) => {
                 }
               }
               }
+              onBlur={handleClick}
             />
           )}
         </li>
