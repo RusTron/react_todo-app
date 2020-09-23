@@ -7,4 +7,4 @@ Implement simple [TODO app](http://todomvc.com/examples/vanillajs/).
 
 ![todoapp](./description/todoapp.gif)
 
-[TodoApp](https://rustron.github.io/react_todo-app/) page
+[React TodoApp](https://rustron.github.io/react_todo-app/)
